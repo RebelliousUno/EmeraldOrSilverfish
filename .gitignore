@@ -1,0 +1,8 @@
+/src/main/resources/settings.properties
+/*.db
+/gradle/
+/.idea/
+/build/
+/.gradle/
+/gradlew.bat
+/gradlew
