@@ -111,12 +111,17 @@ class GameCommands(val prefix: String, val twirk: Twirk, val channel: String, va
     private fun startGameCommand(): Command {
         val help = "Usage: ${prefix}startgame - Starts a game of Emerald or Silver fish"
         return Command(prefix, "startgame", help, modOnly) { _: TwitchUser, _: List<String> ->
-            val id = database.startGame(channel)
-            if (id > 0) {
-                database.startRound(channel, id, 1)
-                twirk.channelMessage("Game started with ID: $id, get ready for round 1")
+            val openGames = database.getOpenGames(channel)
+            if (openGames.isEmpty()) {
+                val id = database.startGame(channel)
+                if (id > 0) {
+                    database.startRound(channel, id, 1)
+                    twirk.channelMessage("Game started with ID: $id, get ready for round 1")
+                } else {
+                    twirk.channelMessage("Problem starting game")
+                }
             } else {
-                twirk.channelMessage("Problem starting game @rebeliousuno help")
+                twirk.channelMessage("Games $openGames already in progress, finish those before starting another")
             }
 
 
