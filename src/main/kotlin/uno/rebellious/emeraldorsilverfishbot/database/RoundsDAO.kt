@@ -250,7 +250,7 @@ and entries.vote = rounds.result"""
 
     fun createGameTable(connection: Connection) {
         val gameTableSQL =
-            "CREATE TABLE IF NOT EXISTS games (gameId INTEGER PRIMARY KEY AUTOINCREMENT, startTime INT, endTime INT)"
+            "CREATE TABLE IF NOT EXISTS games (gameId INTEGER PRIMARY KEY AUTOINCREMENT, startTime INT, endTime INT, winnersUrl TEXT)"
         connection.createStatement()?.apply {
             queryTimeout = 30
             executeUpdate(gameTableSQL)
