@@ -14,11 +14,11 @@ class PastebinDAO(devKey: String?, userKey: String?) {
     private val path = "https://pastebin.com/api/api_post.php"
 
 
-    fun parseWinners(winners: List<Winner>) : String {
+    fun parseWinners(winners: List<Winner>): String {
         val winnerString = StringBuilder().append("Emerald or Silverfish Winners\n")
-        with (winnerString) {
+        with(winnerString) {
             winners.forEach {
-                append("${it.user}\t\tGame ${it.gameId}\t${it.startTime.toLocalDateTime().toString()}\t${it.endTime.toLocalDateTime().toString()}")
+                append("${it.user}\t\tGame ${it.gameId}\t${it.startTime.toLocalDateTime()}\t${it.endTime.toLocalDateTime()}")
                 append("\n")
             }
         }

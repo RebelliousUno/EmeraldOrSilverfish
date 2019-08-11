@@ -9,9 +9,16 @@ import java.util.*
 class Settings {
     private val props = Properties()
     private var settings: DataSettings?
+
     init {
         props.load(this.javaClass.classLoader.getResourceAsStream("settings.properties"))
-        settings = DataSettings(props.getProperty("nick"), props.getProperty("password"), props.getProperty("channel"), props.getProperty("pastebin_dev"), props.getProperty("pastebin_user"))
+        settings = DataSettings(
+            props.getProperty("nick"),
+            props.getProperty("password"),
+            props.getProperty("channel"),
+            props.getProperty("pastebin_dev"),
+            props.getProperty("pastebin_user")
+        )
     }
 
     val nick: String?
@@ -33,4 +40,10 @@ class Settings {
         }
 }
 
-data class DataSettings(val MY_NICK: String, val MY_PASS: String,  val CHANNEL: String, val PASTEBIN_DEV: String, val PASTEBIN_USER: String)
+data class DataSettings(
+    val MY_NICK: String,
+    val MY_PASS: String,
+    val CHANNEL: String,
+    val PASTEBIN_DEV: String,
+    val PASTEBIN_USER: String
+)

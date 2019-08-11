@@ -11,10 +11,15 @@ enum class VoteEligibility {
     ELIGIBLE, NOT_ELIGIBLE, ALREADY_VOTED
 }
 
-class RoundsDAO(private val connectionList: HashMap<String, Connection>): IGame {
+class RoundsDAO(private val connectionList: HashMap<String, Connection>) : IGame {
 
 
-    private fun isPlayerEligibleForRound(channel: String, gameId: Int, currentRound: Int, user: TwitchUser): VoteEligibility {
+    private fun isPlayerEligibleForRound(
+        channel: String,
+        gameId: Int,
+        currentRound: Int,
+        user: TwitchUser
+    ): VoteEligibility {
         return when {
             currentRound == 1 -> VoteEligibility.ELIGIBLE
             user.userName in getUsersForGameRound(channel, gameId, currentRound) -> VoteEligibility.ALREADY_VOTED
@@ -37,7 +42,7 @@ where rounds.gameId = ? and rounds.roundNum = ?
             setInt(2, roundNumber)
             executeQuery()
         }?.run {
-            while(next()) {
+            while (next()) {
                 users.add(getString(1))
             }
         }
@@ -55,7 +60,8 @@ where rounds.gameId = ? and rounds.roundNum = ?
     }
 
     override fun getWinners(channel: String): List<Winner> {
-        val sql = """select roundNum, games.gameId, entries.user, games.startTime, games.endTime from (select roundId, max(roundNum) as roundNum, gameId, result from rounds
+        val sql =
+            """select roundNum, games.gameId, entries.user, games.startTime, games.endTime from (select roundId, max(roundNum) as roundNum, gameId, result from rounds
 GROUP by gameId) as r
 natural join entries
 join games on games.gameId == r.gameId
@@ -65,7 +71,7 @@ where r.result = entries.vote"""
         connection?.createStatement()?.run {
             executeQuery(sql)
         }?.run {
-            while(next()) {
+            while (next()) {
                 val roundNum = getInt(1)
                 val gameId = getInt(2)
                 val user = getString(3)
@@ -92,7 +98,7 @@ and entries.vote = rounds.result"""
             setInt(2, roundNumber)
             executeQuery()
         }?.run {
-            while(next()) {
+            while (next()) {
                 correctUsers.add(getString(1))
             }
         }
@@ -100,13 +106,18 @@ and entries.vote = rounds.result"""
     }
 
 
-
     override fun playerVote(channel: String, vote: VoteType, user: TwitchUser): VoteRecorded {
         val game = getOpenGames(channel).first()
         val currentRound = getRoundForGame(channel, game)
 
         return when (isPlayerEligibleForRound(channel, game, currentRound.first, user)) {
-            VoteEligibility.ELIGIBLE -> if (recordVote(channel, vote, user, currentRound.second)) VoteRecorded.RECORDED else VoteRecorded.ERROR
+            VoteEligibility.ELIGIBLE -> if (recordVote(
+                    channel,
+                    vote,
+                    user,
+                    currentRound.second
+                )
+            ) VoteRecorded.RECORDED else VoteRecorded.ERROR
             VoteEligibility.NOT_ELIGIBLE -> VoteRecorded.INELLIGIBLE
             VoteEligibility.ALREADY_VOTED -> VoteRecorded.ALREADY_VOTED
         }
@@ -182,9 +193,9 @@ and entries.vote = rounds.result"""
             if (next()) {
                 Pair(getInt(1), getInt(2))
             } else {
-                Pair(-1,-1)
+                Pair(-1, -1)
             }
-        } ?: Pair(-1,-1)
+        } ?: Pair(-1, -1)
     }
 
     override fun getOpenGames(channel: String): List<Int> {
@@ -194,7 +205,7 @@ and entries.vote = rounds.result"""
         connection?.createStatement()?.run {
             executeQuery(sql)
         }?.run {
-            while(next()) {
+            while (next()) {
                 openGames.add(getInt(1))
             }
         }
@@ -237,7 +248,8 @@ and entries.vote = rounds.result"""
     }
 
     fun createGameTable(connection: Connection) {
-        val gameTableSQL = "CREATE TABLE IF NOT EXISTS games (gameId INTEGER PRIMARY KEY AUTOINCREMENT, startTime INT, endTime INT)"
+        val gameTableSQL =
+            "CREATE TABLE IF NOT EXISTS games (gameId INTEGER PRIMARY KEY AUTOINCREMENT, startTime INT, endTime INT)"
         connection.createStatement()?.apply {
             queryTimeout = 30
             executeUpdate(gameTableSQL)
@@ -245,7 +257,8 @@ and entries.vote = rounds.result"""
     }
 
     fun createRoundsTable(connection: Connection) {
-        val roundsTableSQL = """CREATE TABLE IF NOT EXISTS "rounds" (
+        val roundsTableSQL =
+            """CREATE TABLE IF NOT EXISTS "rounds" (
 	"roundId"	INTEGER PRIMARY KEY AUTOINCREMENT,
 	"gameId"	INTEGER,
 	"roundNum"	INT,
@@ -273,7 +286,8 @@ and entries.vote = rounds.result"""
     }
 
     override fun setLastGameWinnersURL(channel: String, url: String) {
-        val updateSQL = "UPDATE games SET winnersUrl = ? where gameId in(select max(gameId) from games where endTime is not null)"
+        val updateSQL =
+            "UPDATE games SET winnersUrl = ? where gameId in(select max(gameId) from games where endTime is not null)"
         connectionList[channel]?.prepareStatement(updateSQL)?.run {
             setString(1, url)
             executeUpdate()

@@ -20,11 +20,15 @@ class DatabaseDAO : IDatabase {
         setupAllChannels()
     }
 
-    override fun getCorrectUsersOfGameRound(channel: String, gameId: Int, roundNumber: Int) = gameDAO.getCorrectUsersOfGameRound(channel, gameId, roundNumber)
+    override fun getCorrectUsersOfGameRound(channel: String, gameId: Int, roundNumber: Int) =
+        gameDAO.getCorrectUsersOfGameRound(channel, gameId, roundNumber)
+
     override fun playerVote(channel: String, vote: VoteType, user: TwitchUser) = gameDAO.playerVote(channel, vote, user)
     override fun found(channel: String, found: VoteType) = gameDAO.found(channel, found)
     override fun getRoundForGame(channel: String, gameId: Int) = gameDAO.getRoundForGame(channel, gameId)
-    override fun startRound(channel: String, gameId: Int, roundNumber: Int) = gameDAO.startRound(channel, gameId, roundNumber)
+    override fun startRound(channel: String, gameId: Int, roundNumber: Int) =
+        gameDAO.startRound(channel, gameId, roundNumber)
+
     override fun getOpenGames(channel: String) = gameDAO.getOpenGames(channel)
     override fun startGame(channel: String) = gameDAO.startGame(channel)
     override fun endGame(channel: String) = gameDAO.endGame(channel)
@@ -51,12 +55,11 @@ class DatabaseDAO : IDatabase {
         connectionList.forEach {
             gameDAO.createGameTable(it.value)
             gameDAO.createRoundsTable(it.value)
-            gameDAO.createEntryTable(it.value
-            )
+            gameDAO.createEntryTable(it.value)
         }
     }
 
-    override fun getPrefixForChannel(channel: String): String  = settingsDAO.getPrefixForChannel(channel)
+    override fun getPrefixForChannel(channel: String): String = settingsDAO.getPrefixForChannel(channel)
 
     override fun setPrefixForChannel(channel: String, prefix: String) = settingsDAO.setPrefixForChannel(channel, prefix)
 

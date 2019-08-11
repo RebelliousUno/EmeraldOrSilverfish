@@ -8,7 +8,7 @@ import uno.rebellious.emeraldorsilverfishbot.BotManager
 import uno.rebellious.emeraldorsilverfishbot.database.Channel
 import java.util.*
 
-class CommandManager (private val twirk: Twirk, channel: Channel): CommandList(), TwirkListener {
+class CommandManager(private val twirk: Twirk, channel: Channel) : CommandList(), TwirkListener {
 
     private val commands = ArrayList<CommandList>()
 
@@ -29,14 +29,19 @@ class CommandManager (private val twirk: Twirk, channel: Channel): CommandList()
     }
 
     private fun commandListCommand(): Command {
-        return Command(prefix, "cmdlist", "Usage: ${prefix}cmdlist - lists the commands for this channel", Permission(false, false, false)) { twitchUser: TwitchUser, _: List<String> ->
+        return Command(
+            prefix,
+            "cmdlist",
+            "Usage: ${prefix}cmdlist - lists the commands for this channel",
+            Permission(false, false, false)
+        ) { twitchUser: TwitchUser, _: List<String> ->
 
             val gameCommands = commands
-                    .first { it is GameCommands }
-                    .commandList
-                    .filter { it.canUseCommand(twitchUser) }
-                    .map { command -> command.prefix + command.command }
-                    .sorted()
+                .first { it is GameCommands }
+                .commandList
+                .filter { it.canUseCommand(twitchUser) }
+                .map { command -> command.prefix + command.command }
+                .sorted()
             twirk.channelMessage("Game: $gameCommands")
         }
     }
@@ -49,9 +54,9 @@ class CommandManager (private val twirk: Twirk, channel: Channel): CommandList()
         val command = splitContent[0].toLowerCase(Locale.ENGLISH)
 
         commandList
-                .filter { command.startsWith("${it.prefix}${it.command}") }
-                .firstOrNull { it.canUseCommand(sender) }
-                ?.action?.invoke(sender, splitContent) ?: run {
+            .filter { command.startsWith("${it.prefix}${it.command}") }
+            .firstOrNull { it.canUseCommand(sender) }
+            ?.action?.invoke(sender, splitContent) ?: run {
         }
     }
 }

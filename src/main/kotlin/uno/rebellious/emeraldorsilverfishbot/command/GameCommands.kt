@@ -7,7 +7,13 @@ import uno.rebellious.emeraldorsilverfishbot.model.VoteRecorded
 import uno.rebellious.emeraldorsilverfishbot.model.VoteType
 import uno.rebellious.emeraldorsilverfishbot.pastebin.PastebinDAO
 
-class GameCommands(val prefix: String, val twirk: Twirk, val channel: String, val database: DatabaseDAO, val pastebin: PastebinDAO) : CommandList() {
+class GameCommands(
+    val prefix: String,
+    val twirk: Twirk,
+    val channel: String,
+    val database: DatabaseDAO,
+    val pastebin: PastebinDAO
+) : CommandList() {
 
     companion object {
         val ownerOnly = Permission(true, false, false)
@@ -29,7 +35,7 @@ class GameCommands(val prefix: String, val twirk: Twirk, val channel: String, va
 
 
     private fun winnersCommand(): Command {
-        return Command(prefix, "winners", "", anyone) { _:TwitchUser, _: List<String> ->
+        return Command(prefix, "winners", "", anyone) { _: TwitchUser, _: List<String> ->
             var winnerURL = database.getLastGameWinnersURL(channel)
             if (winnerURL.isBlank()) {
                 val winners = database.getWinners(channel)
@@ -69,16 +75,15 @@ class GameCommands(val prefix: String, val twirk: Twirk, val channel: String, va
                 try {
                     val type = VoteType.valueOf(args[1].toUpperCase())
                     val newRound = database.found(channel, type)
-                    if (newRound>0) {
+                    if (newRound > 0) {
                         val gameId = database.getOpenGames(channel).first()
                         val users = database.getCorrectUsersOfGameRound(channel, gameId, newRound - 1)
-                        if (users.size <=1) {
+                        if (users.size <= 1) {
                             database.endGame(channel, gameId)
                             twirk.channelMessage("Game Over Man: $gameId")
                         }
                         twirk.channelMessage("Result is $type, round $newRound started, the following user(s) got the answer right $users")
-                    }
-                    else {
+                    } else {
                         twirk.channelMessage("Something went wrong recording result or starting new round @RebelliousUno Help")
                     }
                 } catch (iae: IllegalArgumentException) {
@@ -135,7 +140,7 @@ class GameCommands(val prefix: String, val twirk: Twirk, val channel: String, va
             } else {
                 database.endGame(channel)
             }
-            if (id>0)
+            if (id > 0)
                 twirk.channelMessage("Ended Game ID: $id")
             else
                 twirk.channelMessage("Could not find open game")

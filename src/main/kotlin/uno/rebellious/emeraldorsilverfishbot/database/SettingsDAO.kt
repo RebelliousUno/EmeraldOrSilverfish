@@ -23,7 +23,7 @@ internal class SettingsDAO(private val connectionList: HashMap<String, Connectio
         connection?.prepareStatement(sql)?.run {
             executeQuery()
         }?.apply {
-            while(next()) returnList.add(getString("command"))
+            while (next()) returnList.add(getString("command"))
         }
         return returnList
     }
@@ -82,7 +82,7 @@ internal class SettingsDAO(private val connectionList: HashMap<String, Connectio
         return settingsDB?.prepareStatement(sql)?.run {
             setString(1, channel)
             executeQuery()
-        }?.run {next()} ?: false
+        }?.run { next() } ?: false
     }
 
     fun createChannelsTable() {

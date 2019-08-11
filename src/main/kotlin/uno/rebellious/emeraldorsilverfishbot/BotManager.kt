@@ -30,22 +30,22 @@ object BotManager {
             val password = if (channel.token.isBlank()) SETTINGS.password else channel.token
 
             val twirk = TwirkBuilder("#${channel.channel}", nick, password)
-                    .setVerboseMode(true)
-                    .build()
+                .setVerboseMode(true)
+                .build()
             twirk.connect()
             twirk.addIrcListener(CommandManager(twirk, channel))
             twirk.addIrcListener(getOnDisconnectListener(twirk))
 
             scanner
-                    .takeUntil { it == ".quit" }
-                    .subscribe {
-                        if (it == ".quit") {
-                            println("Quitting $channel")
-                            twirk.close()
-                        } else {
-                            twirk.channelMessage(it)
-                        }
+                .takeUntil { it == ".quit" }
+                .subscribe {
+                    if (it == ".quit") {
+                        println("Quitting $channel")
+                        twirk.close()
+                    } else {
+                        twirk.channelMessage(it)
                     }
+                }
         })
         twirkThread.name = channel.channel
         twirkThread.start()
