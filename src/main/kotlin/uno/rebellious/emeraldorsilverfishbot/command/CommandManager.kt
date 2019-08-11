@@ -5,7 +5,7 @@ import com.gikk.twirk.events.TwirkListener
 import com.gikk.twirk.types.twitchMessage.TwitchMessage
 import com.gikk.twirk.types.users.TwitchUser
 import uno.rebellious.emeraldorsilverfishbot.BotManager
-import uno.rebellious.emeraldorsilverfishbot.database.Channel
+import uno.rebellious.emeraldorsilverfishbot.model.Channel
 import java.util.*
 
 class CommandManager(private val twirk: Twirk, channel: Channel) : CommandList(), TwirkListener {

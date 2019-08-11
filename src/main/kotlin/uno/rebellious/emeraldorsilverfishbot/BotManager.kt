@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.subjects.BehaviorSubject
 import uno.rebellious.emeraldorsilverfishbot.command.CommandManager
-import uno.rebellious.emeraldorsilverfishbot.database.Channel
+import uno.rebellious.emeraldorsilverfishbot.model.Channel
 import uno.rebellious.emeraldorsilverfishbot.database.DatabaseDAO
 import uno.rebellious.emeraldorsilverfishbot.model.Settings
 import uno.rebellious.emeraldorsilverfishbot.pastebin.PastebinDAO

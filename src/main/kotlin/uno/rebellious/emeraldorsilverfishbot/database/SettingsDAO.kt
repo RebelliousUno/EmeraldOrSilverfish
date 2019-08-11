@@ -1,5 +1,6 @@
 package uno.rebellious.emeraldorsilverfishbot.database
 
+import uno.rebellious.emeraldorsilverfishbot.model.Channel
 import java.sql.Connection
 import java.sql.DriverManager
 import java.util.*

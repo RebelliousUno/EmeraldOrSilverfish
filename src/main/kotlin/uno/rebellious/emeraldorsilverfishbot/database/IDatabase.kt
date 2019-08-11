@@ -1,6 +1,7 @@
 package uno.rebellious.emeraldorsilverfishbot.database
 
 import com.gikk.twirk.types.users.TwitchUser
+import uno.rebellious.emeraldorsilverfishbot.model.Channel
 import uno.rebellious.emeraldorsilverfishbot.model.VoteRecorded
 import uno.rebellious.emeraldorsilverfishbot.model.VoteType
 import java.util.*
