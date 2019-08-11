@@ -6,5 +6,5 @@ enum class VoteType {
 }
 
 enum class VoteRecorded {
-    RECORDED, INELLIGIBLE, ERROR, ALREADY_VOTED
+    RECORDED, INELLIGIBLE, ERROR, ALREADY_VOTED, NO_GAME_RUNNING
 }

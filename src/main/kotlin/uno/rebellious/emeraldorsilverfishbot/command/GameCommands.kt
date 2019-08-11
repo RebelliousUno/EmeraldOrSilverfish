@@ -65,6 +65,7 @@ class GameCommands(
             VoteRecorded.INELLIGIBLE -> "Sorry ${user.userName}: you're not able to vote this round, wait for the next game"
             VoteRecorded.ERROR -> "Sorry ${user.userName}: something went wrong"
             VoteRecorded.ALREADY_VOTED -> "Sorry ${user.userName}: you've already voted this round, I hope you win"
+            VoteRecorded.NO_GAME_RUNNING -> "Sorry ${user.userName}, there's currently no game running"
         }
         twirk.channelMessage(message)
     }

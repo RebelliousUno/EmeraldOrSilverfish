@@ -107,7 +107,8 @@ and entries.vote = rounds.result"""
 
 
     override fun playerVote(channel: String, vote: VoteType, user: TwitchUser): VoteRecorded {
-        val game = getOpenGames(channel).first()
+        val gameList = getOpenGames(channel)
+        val game = if (gameList.isNotEmpty()) gameList.first() else return VoteRecorded.NO_GAME_RUNNING
         val currentRound = getRoundForGame(channel, game)
 
         return when (isPlayerEligibleForRound(channel, game, currentRound.first, user)) {
