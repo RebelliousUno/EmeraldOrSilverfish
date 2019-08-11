@@ -4,7 +4,6 @@ import com.gikk.twirk.types.users.TwitchUser
 import uno.rebellious.emeraldorsilverfishbot.model.VoteType
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.Timestamp
 import java.util.*
 
 class DatabaseDAO : IDatabase {

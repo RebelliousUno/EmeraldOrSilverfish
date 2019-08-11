@@ -2,7 +2,6 @@ package uno.rebellious.emeraldorsilverfishbot.command
 
 import com.gikk.twirk.Twirk
 import com.gikk.twirk.types.users.TwitchUser
-import com.google.gson.Gson
 import uno.rebellious.emeraldorsilverfishbot.database.DatabaseDAO
 
 

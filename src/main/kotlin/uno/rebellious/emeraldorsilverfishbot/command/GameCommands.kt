@@ -6,8 +6,6 @@ import uno.rebellious.emeraldorsilverfishbot.database.DatabaseDAO
 import uno.rebellious.emeraldorsilverfishbot.model.VoteRecorded
 import uno.rebellious.emeraldorsilverfishbot.model.VoteType
 import uno.rebellious.emeraldorsilverfishbot.pastebin.PastebinDAO
-import java.lang.IllegalArgumentException
-import java.sql.Timestamp
 
 class GameCommands(val prefix: String, val twirk: Twirk, val channel: String, val database: DatabaseDAO, val pastebin: PastebinDAO) : CommandList() {
 

@@ -3,7 +3,6 @@ package uno.rebellious.emeraldorsilverfishbot.pastebin
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import uno.rebellious.emeraldorsilverfishbot.database.Winner
-import java.lang.StringBuilder
 
 class PastebinDAO(devKey: String?, userKey: String?) {
 
