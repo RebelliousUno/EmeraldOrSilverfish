@@ -1,60 +1,54 @@
 package emeraldorsilverfish.tests.dao
 
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.*
 import uno.rebellious.emeraldorsilverfishbot.database.RoundsDAO
 import java.sql.Connection
 import java.sql.DriverManager
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class TestRoundsDAO() {
+@TestMethodOrder(MethodOrderer.Alphanumeric::class)
+class TestRoundsDAO {
 
     lateinit var roundsDAO: RoundsDAO
     private var connectionList: HashMap<String, Connection> = HashMap()
-
-
-    @BeforeAll
-    fun setUp() {
-        val con = DriverManager.getConnection("jdbc:sqlite:test.db")
-        connectionList["test"] = con
-        roundsDAO = RoundsDAO(connectionList)
-    }
-
-    @AfterAll
-    fun tearDown() {
-
-    }
+    lateinit var con: Connection
+    private val channel = "test"
 
     @BeforeEach
     fun setUpTestDB() {
-        roundsDAO.createEntryTable(connectionList["test"]!!)
-        roundsDAO.createGameTable(connectionList["test"]!!)
-        roundsDAO.createRoundsTable(connectionList["test"]!!)
+        con = DriverManager.getConnection("jdbc:sqlite:$channel.db")
+        connectionList[channel] = con
+        roundsDAO = RoundsDAO(connectionList)
+
+        roundsDAO.createEntryTable(connectionList[channel]!!)
+        roundsDAO.createGameTable(connectionList[channel]!!)
+        roundsDAO.createRoundsTable(connectionList[channel]!!)
     }
 
     @AfterEach
     fun clearDownTestDB() {
-        val con = connectionList["test"]!!
-        con.autoCommit = false
+        con.close()
+        con = DriverManager.getConnection("jdbc:sqlite:$channel.db")
         listOf("entries", "rounds", "games").forEach {
-            val dropTablesSQL ="drop table IF EXISTS $it"
+            val dropTablesSQL = "drop table IF EXISTS $it"
             con.createStatement()?.execute(dropTablesSQL)
         }
-        con.commit()
-        con.autoCommit = true
+        con.close()
     }
 
     @Test
     fun testDatabaseSetup() {
-        val con = connectionList["test"]!!
-        val nameList = listOf("entries", "rounds", "games")
+        val nameList = ArrayList(listOf("entries", "rounds", "games"))
         val resultList = ArrayList<String>()
         con
             .createStatement()
             .executeQuery("select name from SQLITE_MASTER")?.run {
-            while (next()) {
-                resultList.add(getString(1))
+                while (next()) {
+                    resultList.add(getString(1))
+                }
             }
-        }
         assert(resultList.containsAll(nameList))
     }
 
@@ -77,11 +71,40 @@ class TestRoundsDAO() {
         val results = getTableCol("games")
         val expected = listOf("gameId", "startTime", "endTime", "winnersUrl")
         assert(results.containsAll(expected))
+
+    }
+
+    @Test
+    fun startGame() {
+        val game = roundsDAO.startGame(channel)
+
+        assertThat(game, `is`(1))
+    }
+
+    @Test
+    fun startGameWhenOneRunning() {
+        //logic for game running is done in the GameCommands Class
+        val game1 = roundsDAO.startGame(channel)
+        val game2 = roundsDAO.startGame(channel)
+        assertThat(game1, `is`(1))
+        assertThat(game2, `is`(2))
+    }
+
+    @Test
+    fun roundsCreated() {
+        //logic for creating a round when a game is started is done in GameCommands Class
+        val game = roundsDAO.startGame(channel)
+        var roundPair = roundsDAO.getRoundForGame(channel, game)
+        assertThat(roundPair, `is`(Pair(0, 0)))
+
+        val round = roundsDAO.startRound(channel, game, 1)
+        roundPair = roundsDAO.getRoundForGame(channel, game)
+        assertThat(round, `is`(1))
+        assertThat(roundPair, `is`(Pair(1, 1)))
     }
 
     private fun getTableCol(tableName: String): ArrayList<String> {
         val resultList = ArrayList<String>()
-        val con = connectionList["test"]!!
         con.createStatement()
             .executeQuery("select name from pragma_table_info('$tableName')")?.run {
                 while (next()) {
