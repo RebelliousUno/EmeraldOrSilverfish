@@ -67,7 +67,7 @@ class GameCommands(
             VoteRecorded.ALREADY_VOTED -> "Sorry ${user.userName}: you've already voted this round, I hope you win"
             VoteRecorded.NO_GAME_RUNNING -> "Sorry ${user.userName}, there's currently no game running"
         }
-        twirk.channelMessage(message)
+        //twirk.channelMessage(message)
     }
 
     private fun foundCommand(): Command {

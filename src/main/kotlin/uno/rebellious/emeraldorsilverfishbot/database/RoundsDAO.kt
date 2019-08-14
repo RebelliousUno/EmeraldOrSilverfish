@@ -1,18 +1,14 @@
 package uno.rebellious.emeraldorsilverfishbot.database
 
 import com.gikk.twirk.types.users.TwitchUser
+import uno.rebellious.emeraldorsilverfishbot.model.VoteEligibility
 import uno.rebellious.emeraldorsilverfishbot.model.VoteRecorded
 import uno.rebellious.emeraldorsilverfishbot.model.VoteType
 import java.sql.Connection
 import java.sql.Timestamp
 import java.time.Instant
 
-enum class VoteEligibility {
-    ELIGIBLE, NOT_ELIGIBLE, ALREADY_VOTED
-}
-
 class RoundsDAO(private val connectionList: HashMap<String, Connection>) : IGame {
-
 
     private fun isPlayerEligibleForRound(
         channel: String,
