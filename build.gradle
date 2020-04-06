@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
     //implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
-    implementation 'com.github.Gikkman:Java-Twirk:0.5'
+    implementation 'com.github.Gikkman:Java-Twirk:0.6'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.github.kittinunf.fuel:fuel:2.2.1' //for JVM
     implementation 'org.xerial:sqlite-jdbc:3.30.1'
