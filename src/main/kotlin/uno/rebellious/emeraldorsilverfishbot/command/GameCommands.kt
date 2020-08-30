@@ -67,11 +67,11 @@ class GameCommands(
             VoteRecorded.ALREADY_VOTED -> "Sorry ${user.userName}: you've already voted this round, I hope you win"
             VoteRecorded.NO_GAME_RUNNING -> "Sorry ${user.userName}, there's currently no game running"
         }
-        //twirk.channelMessage(message)
+        twirk.whisper(user, message)
     }
 
     private fun foundCommand(): Command {
-        return Command(prefix, "found", "", modOnly) { _: TwitchUser, args: List<String> ->
+        return Command(prefix, "found", "${prefix}found (emerald|silverfish) ", modOnly) { _: TwitchUser, args: List<String> ->
             if (args.size > 1) {
                 try {
                     val type = VoteType.valueOf(args[1].toUpperCase())

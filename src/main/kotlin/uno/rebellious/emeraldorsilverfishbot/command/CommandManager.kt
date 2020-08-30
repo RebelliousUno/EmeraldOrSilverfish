@@ -6,6 +6,7 @@ import com.gikk.twirk.types.twitchMessage.TwitchMessage
 import com.gikk.twirk.types.users.TwitchUser
 import uno.rebellious.emeraldorsilverfishbot.BotManager
 import uno.rebellious.emeraldorsilverfishbot.model.Channel
+import java.time.Instant
 import java.util.*
 
 class CommandManager(private val twirk: Twirk, channel: Channel) : CommandList(), TwirkListener {
@@ -13,6 +14,7 @@ class CommandManager(private val twirk: Twirk, channel: Channel) : CommandList()
     private val commands = ArrayList<CommandList>()
 
     private var prefix = "^"
+    private val commandTimeout = HashMap<String, Instant>()
     private val database = BotManager.database
     private val pastebin = BotManager.pastebin
 
@@ -53,10 +55,22 @@ class CommandManager(private val twirk: Twirk, channel: Channel) : CommandList()
         val splitContent = content.split(' ', ignoreCase = true, limit = 3)
         val command = splitContent[0].toLowerCase(Locale.ENGLISH)
 
-        commandList
-            .filter { command.startsWith("${it.prefix}${it.command}") }
-            .firstOrNull { it.canUseCommand(sender) }
-            ?.action?.invoke(sender, splitContent) ?: run {
+        val expiry = commandTimeout[content.toLowerCase()]
+        val now = Instant.now()
+        if (expiry == null || expiry.isBefore(now)) { // Commands with Timeouts
+
+            if (command in listOf("${prefix}found", "${prefix}startgame", "${prefix}endgame")) commandTimeout[content.toLowerCase()] = now.plusSeconds(30) //Only Add Found, Start, End to the expiry list
+            commandList
+                .filter { command.startsWith("${it.prefix}${it.command}") }
+                .firstOrNull { it.canUseCommand(sender) }
+                ?.action?.invoke(sender, splitContent) ?: run {
+            }
         }
+        pruneExpiryList()
+    }
+
+    private fun pruneExpiryList() {
+        val expired = commandTimeout.filterValues { it < Instant.now() }
+        expired.keys.forEach { commandTimeout.remove(it) }
     }
 }
