@@ -6,7 +6,7 @@ import uno.rebellious.emeraldorsilverfishbot.database.Winner
 
 class PastebinDAO(devKey: String?, userKey: String?) {
 
-//    private val expiry = Pair("api_paste_expire_date", "1W")
+    //    private val expiry = Pair("api_paste_expire_date", "1W")
     private val apiOption = Pair("api_option", "paste")
     private val apiDevKey = Pair("api_dev_key", devKey)
     private val apiUserKey = Pair("api_user_key", userKey)

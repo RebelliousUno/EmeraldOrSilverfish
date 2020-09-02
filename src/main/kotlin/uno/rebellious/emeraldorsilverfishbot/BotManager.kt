@@ -7,8 +7,8 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.subjects.BehaviorSubject
 import uno.rebellious.emeraldorsilverfishbot.command.CommandManager
-import uno.rebellious.emeraldorsilverfishbot.model.Channel
 import uno.rebellious.emeraldorsilverfishbot.database.DatabaseDAO
+import uno.rebellious.emeraldorsilverfishbot.model.Channel
 import uno.rebellious.emeraldorsilverfishbot.model.Settings
 import uno.rebellious.emeraldorsilverfishbot.pastebin.PastebinDAO
 import java.util.*
@@ -34,7 +34,7 @@ object BotManager {
                 .build()
             twirk.connect()
             twirk.addIrcListener(CommandManager(twirk, channel))
-            twirk.addIrcListener(getOnDisconnectListener(twirk))
+            twirk.addIrcListener(getOnDisconnectListener(twirk, channel))
 
             scanner
                 .takeUntil { it == ".quit" }
@@ -57,7 +57,7 @@ object BotManager {
         thread?.interrupt()
     }
 
-    private fun getOnDisconnectListener(twirk: Twirk): TwirkListener? {
-        return UnoBotBase(twirk)
+    private fun getOnDisconnectListener(twirk: Twirk, channel: Channel): TwirkListener? {
+        return UnoBotBase(twirk, channel)
     }
 }

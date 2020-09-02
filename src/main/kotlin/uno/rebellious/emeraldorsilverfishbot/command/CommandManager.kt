@@ -59,7 +59,13 @@ class CommandManager(private val twirk: Twirk, channel: Channel) : CommandList()
         val now = Instant.now()
         if (expiry == null || expiry.isBefore(now)) { // Commands with Timeouts
 
-            if (command in listOf("${prefix}found", "${prefix}startgame", "${prefix}endgame")) commandTimeout[content.toLowerCase()] = now.plusSeconds(30) //Only Add Found, Start, End to the expiry list
+            if (command in listOf(
+                    "${prefix}found",
+                    "${prefix}startgame",
+                    "${prefix}endgame"
+                )
+            ) commandTimeout[content.toLowerCase()] =
+                now.plusSeconds(30) //Only Add Found, Start, End to the expiry list
             commandList
                 .filter { command.startsWith("${it.prefix}${it.command}") }
                 .firstOrNull { it.canUseCommand(sender) }

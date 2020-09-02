@@ -132,7 +132,7 @@ and entries.vote = rounds.result"""
     }
 
     override fun found(channel: String, found: VoteType): Int {
-        val game = getOpenGames(channel).max() ?: return -1
+        val game = getOpenGames(channel).maxOrNull() ?: return -1
         val round = getRoundForGame(channel, game)
         return found(channel, game, round.first, found)
     }

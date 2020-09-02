@@ -71,7 +71,12 @@ class GameCommands(
     }
 
     private fun foundCommand(): Command {
-        return Command(prefix, "found", "${prefix}found (emerald|silverfish) ", modOnly) { _: TwitchUser, args: List<String> ->
+        return Command(
+            prefix,
+            "found",
+            "${prefix}found (emerald|silverfish) ",
+            modOnly
+        ) { _: TwitchUser, args: List<String> ->
             if (args.size > 1) {
                 try {
                     val type = VoteType.valueOf(args[1].toUpperCase())
@@ -81,9 +86,13 @@ class GameCommands(
                         val users = database.getCorrectUsersOfGameRound(channel, gameId, newRound - 1)
                         if (users.size <= 1) {
                             database.endGame(channel)
-                            twirk.channelMessage("Game Over Man: $gameId, Congratulations to $users")
+                            twirk.channelMessage(if (users.isEmpty()) {
+                                "Game Over Man: $gameId. There were no winners."
+                            } else {
+                                "Game Over Man: $gameId. Congratulations to $users."
+                            })
                         } else {
-                            twirk.channelMessage("Result is $type, round $newRound started, the following user(s) got the answer right $users")
+                            twirk.channelMessage("Result is $type, round $newRound started, the following ${users.size} user(s) got the answer right $users")
                         }
                     } else {
                         twirk.channelMessage("Something went wrong recording result or starting new round @RebelliousUno Help")
@@ -98,10 +107,15 @@ class GameCommands(
     }
 
     private fun getCurrentRoundCommand(): Command {
-        return Command(prefix, "currentround", "", modOnly) { _: TwitchUser, _: List<String> ->
+        return Command(
+            prefix,
+            "currentround",
+            "${prefix}currentround - shows the current round of the game",
+            modOnly
+        ) { _: TwitchUser, _: List<String> ->
             val gameId = database.getOpenGames(channel).first()
-            val round = database.getRoundForGame(channel, gameId)
-            twirk.channelMessage("Game $gameId is on round $round.first")
+            val round = database.getRoundForGame(channel, gameId) // round num, round id
+            twirk.channelMessage("Game $gameId is on round ${round.first}")
         }
     }
 
@@ -128,13 +142,11 @@ class GameCommands(
             } else {
                 twirk.channelMessage("Games $openGames already in progress, finish those before starting another")
             }
-
-
         }
     }
 
     private fun endGameCommand(): Command {
-        val help = "Usage: ${prefix}endgame - Starts a game of Emerald or Silver fish"
+        val help = "Usage: ${prefix}endgame [id] - Ends a game of Emerald or Silverfish with an optional id"
         return Command(prefix, "endgame", help, modOnly) { _: TwitchUser, args: List<String> ->
             val id = if (args.size > 1) {
                 val gameId = Integer.parseInt(args[1])
