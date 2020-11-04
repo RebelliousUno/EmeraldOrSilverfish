@@ -48,7 +48,7 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest:$hamcrestVersion"
     testImplementation 'com.natpryce:hamkrest:1.8.0.1'
     testImplementation "org.junit.jupiter:junit-jupiter:$junit_version"
-    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.4.0'
+    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.4.1'
 
 }
 
