@@ -3,7 +3,7 @@ version '1.0.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.5.10'
-    ext.junit_version = '5.7.2'
+    ext.junit_version = '5.8.1'
     ext.hamcrestVersion = '2.2'
 
     repositories {
