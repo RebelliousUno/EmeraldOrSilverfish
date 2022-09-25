@@ -2,7 +2,7 @@ group 'uno.rebellious'
 version '1.0.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.5.31'
+    ext.kotlin_version = '1.7.10'
     ext.junit_version = '5.8.1'
     ext.hamcrestVersion = '2.2'
 
